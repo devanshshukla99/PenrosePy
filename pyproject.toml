@@ -6,16 +6,16 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-write_to = "sphinx_versioned/_version.py"
+write_to = "penrosepy/_version.py"
 
 [tool.black]
 line-length = 110
 
 [tool.towncrier]
-    package = "sphinx_versioned"
+    package = "penrosepy"
     filename = "CHANGELOG.rst"
     directory = "docs/changes/"
-    issue_format = "`#{issue} <https://github.com/devanshshukla99/sphinx-versioned-docs/pull/{issue}>`__"
+    issue_format = "`#{issue} <https://github.com/devanshshukla99/PenrosePy/pull/{issue}>`__"
     title_format = "{version} ({project_date})"
 
     [[tool.towncrier.type]]

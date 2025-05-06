@@ -5,7 +5,7 @@ import matplotlib as mpl
 from shapely import plotting
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
-from penrose.mpl_config import custom_rcparams
+from penrosepy.mpl_config import custom_rcparams
 from shapely.geometry import LineString, Polygon
 
 """

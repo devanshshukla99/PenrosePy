@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pylab as plt
-from matplotlib import transforms
-from penrose.penrose import PenrosePy
+from penrosepy.penrose import PenrosePy
 
 length = np.pi / 2
 penrose = PenrosePy(length)
