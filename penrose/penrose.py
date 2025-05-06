@@ -1,12 +1,12 @@
-import matplotlib as mpl
 import itertools
-from shapely.geometry import LineString, Polygon, MultiPoint, Point
-from shapely import plotting
-import matplotlib.pyplot as plt
 import numpy as np
 import sympy as sp
-from penrose.mpl_config import custom_rcparams
+import matplotlib as mpl
+from shapely import plotting
+import matplotlib.pyplot as plt
 from dataclasses import dataclass
+from penrose.mpl_config import custom_rcparams
+from shapely.geometry import LineString, Polygon
 
 """
 Original coordinates (t, r, \theta, \varphi)
