@@ -20,6 +20,7 @@ Structure of Penrose
 
 mpl.rcParams.update(custom_rcparams)
 
+
 @dataclass
 class Infty:
     x: float
@@ -32,14 +33,16 @@ class Infty:
 
     def __repr__(self):
         return f"<{self.label}: {self.x, self.y}>"
+
     pass
+
 
 class PenrosePy:
     def __init__(self, length: int, plot_text: bool = True):
         self.length = length
         self.plot_text = plot_text
         pass
-    
+
     def penrose_diamond(self):
         timelike_infties = (Infty(0, self.length, r"$i^+$"), Infty(0, -self.length, r"$i^-$"))
         spacelike_infties = (Infty(self.length, 0, r"$i^0$"), Infty(-self.length, 0, r"$i^0$"))
@@ -55,18 +58,38 @@ class PenrosePy:
         plotting.plot_polygon(self.structure, add_points=False, edgecolor="black", facecolor="lightgray")
         plt.scatter(*timelike_infties[0].xy, facecolors="none", edgecolors="red", label="timelike infinity")
         plt.scatter(*timelike_infties[1].xy, facecolors="none", edgecolors="red", label="timelike infinity")
-        plt.scatter(*spacelike_infties[0].xy, facecolors="none", edgecolors="blue", label="spacelike infinity")
-        plt.scatter(*spacelike_infties[1].xy, facecolors="none", edgecolors="blue", label="spacelike infinity")
+        plt.scatter(
+            *spacelike_infties[0].xy, facecolors="none", edgecolors="blue", label="spacelike infinity"
+        )
+        plt.scatter(
+            *spacelike_infties[1].xy, facecolors="none", edgecolors="blue", label="spacelike infinity"
+        )
 
         if self.plot_text:
             plt.text(
-                spacelike_infties[0].x + 0.05, spacelike_infties[0].y + 0.4, spacelike_infties[0].label, fontsize=12
+                spacelike_infties[0].x + 0.05,
+                spacelike_infties[0].y + 0.4,
+                spacelike_infties[0].label,
+                fontsize=12,
             )
             plt.text(
-                spacelike_infties[1].x - 0.4, spacelike_infties[1].y + 0.4, spacelike_infties[1].label, fontsize=12
+                spacelike_infties[1].x - 0.4,
+                spacelike_infties[1].y + 0.4,
+                spacelike_infties[1].label,
+                fontsize=12,
             )
-            plt.text(timelike_infties[0].x + 0.2, timelike_infties[0].y + 0.1, timelike_infties[0].label, fontsize=12)
-            plt.text(timelike_infties[1].x + 0.2, timelike_infties[1].y - 0.4, timelike_infties[1].label, fontsize=12)
+            plt.text(
+                timelike_infties[0].x + 0.2,
+                timelike_infties[0].y + 0.1,
+                timelike_infties[0].label,
+                fontsize=12,
+            )
+            plt.text(
+                timelike_infties[1].x + 0.2,
+                timelike_infties[1].y - 0.4,
+                timelike_infties[1].label,
+                fontsize=12,
+            )
 
             plt.text((self.length / 2 + 0.05), (self.length / 2 + 0.05), r"$\mathcal{I}^+_R$", fontsize=12)
             plt.text(-(self.length / 2 + 1), (self.length / 2 + 0.05), r"$\mathcal{I}^+_L$", fontsize=12)
@@ -76,8 +99,8 @@ class PenrosePy:
 
         # Null hypersurfaces
         null_hyps = [
-            (LineString(([-self.length, -self.length], [self.length, self.length])), "u=0"), # null outgoing
-            (LineString(([-self.length, self.length], [self.length, -self.length])), "v=0"), # null ingoing
+            (LineString(([-self.length, -self.length], [self.length, self.length])), "u=0"),  # null outgoing
+            (LineString(([-self.length, self.length], [self.length, -self.length])), "v=0"),  # null ingoing
         ]
         null, label = null_hyps[0]
         lineintersection = null.intersection(self.structure)
@@ -91,7 +114,6 @@ class PenrosePy:
         midpoint = lineintersection.interpolate(0.25, normalized=True)
         # plt.text(midpoint.x, midpoint.y - 0.5, label, fontsize=10, ha='center', va='center', rotation=-45)
         return
-
 
     def penrose_triangle(self):
         r_surface = LineString(([0, 0], [self.length, 0]))
@@ -111,13 +133,28 @@ class PenrosePy:
         plotting.plot_polygon(self.structure, add_points=False, edgecolor="black", facecolor="lightgray")
         plt.scatter(*timelike_infties[0].xy, facecolors="none", edgecolors="red", label="timelike infinity")
         plt.scatter(*timelike_infties[1].xy, facecolors="none", edgecolors="red", label="timelike infinity")
-        plt.scatter(*spacelike_infties[0].xy, facecolors="none", edgecolors="blue", label="spacelike infinity")
+        plt.scatter(
+            *spacelike_infties[0].xy, facecolors="none", edgecolors="blue", label="spacelike infinity"
+        )
 
         if self.plot_text:
-            plt.text(timelike_infties[0].x + 0.15, timelike_infties[0].y + 0.1, timelike_infties[0].label, fontsize=12)
-            plt.text(timelike_infties[1].x + 0.15, timelike_infties[1].y - 0.35, timelike_infties[1].label, fontsize=12)
             plt.text(
-                spacelike_infties[0].x - 0.1, spacelike_infties[0].y + 0.4, spacelike_infties[0].label, fontsize=12
+                timelike_infties[0].x + 0.15,
+                timelike_infties[0].y + 0.1,
+                timelike_infties[0].label,
+                fontsize=12,
+            )
+            plt.text(
+                timelike_infties[1].x + 0.15,
+                timelike_infties[1].y - 0.35,
+                timelike_infties[1].label,
+                fontsize=12,
+            )
+            plt.text(
+                spacelike_infties[0].x - 0.1,
+                spacelike_infties[0].y + 0.4,
+                spacelike_infties[0].label,
+                fontsize=12,
             )
 
             plt.text((self.length / 2 + 0.05), (self.length / 2 + 0.05), r"$\mathcal{I}^+$", fontsize=12)
@@ -125,25 +162,28 @@ class PenrosePy:
 
         # Null hypersurfaces
         null_hyps = [
-            (LineString(([0, 0], [self.length, self.length])), "u=0"), # null outgoing
-            (LineString(([0, 0], [self.length, -self.length])), "v=0"), # null ingoing
+            (LineString(([0, 0], [self.length, self.length])), "u=0"),  # null outgoing
+            (LineString(([0, 0], [self.length, -self.length])), "v=0"),  # null ingoing
         ]
         null, label = null_hyps[0]
         lineintersection = null.intersection(self.structure)
         plt.plot(*lineintersection.xy, color=(0.477504, 0.821444, 0.318195, 1.0), label=label)
         midpoint = lineintersection.interpolate(0.5, normalized=True)
-        if self.plot_text: plt.text(midpoint.x, midpoint.y + 0.25, label, fontsize=10, ha="center", va="center", rotation=45)
+        if self.plot_text:
+            plt.text(midpoint.x, midpoint.y + 0.25, label, fontsize=10, ha="center", va="center", rotation=45)
 
         null, label = null_hyps[1]
         lineintersection = null.intersection(self.structure)
         plt.plot(*lineintersection.xy, color=(0.282623, 0.140926, 0.457517, 1.0), label=label)
         midpoint = lineintersection.interpolate(0.5, normalized=True)
-        if self.plot_text: plt.text(midpoint.x, midpoint.y - 0.25, label, fontsize=10, ha="center", va="center", rotation=-45)
+        if self.plot_text:
+            plt.text(
+                midpoint.x, midpoint.y - 0.25, label, fontsize=10, ha="center", va="center", rotation=-45
+            )
 
         # Dashed-r-surface
         plt.plot(*r_surface.xy, "--", color="black")
         return
-
 
     def plot_hypersurface(self, t, r, *args, **kwargs):
         hypsurface = LineString([(x, y) for x, y in zip(t, r)])
@@ -151,8 +191,8 @@ class PenrosePy:
         plt.plot(*intersection.xy, *args, **kwargs)
 
     def show(self, *args, **kwargs):
-        plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
-        plt.gca().set_aspect('equal')
+        plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+        plt.gca().set_aspect("equal")
         plt.grid(False)
         plt.show(*args, **kwargs)
 

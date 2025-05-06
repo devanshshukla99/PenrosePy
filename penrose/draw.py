@@ -20,4 +20,3 @@ penrose.plot_hypersurface(r, t, label=r"$(t+2)^2 - r^2 = 1$")
 t = np.sqrt(1 + r**2) - 3
 penrose.plot_hypersurface(r, t, label=r"$(t+3)^2 - r^2 = 1$")
 penrose.show()
-
