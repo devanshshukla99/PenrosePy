@@ -15,12 +15,12 @@ custom_rcparams = {
     "legend.fontsize": 6,
     # "legend.frameon": False,
     # Ticks
-    "xtick.labelsize": 6,
-    "ytick.labelsize": 6,
-    "xtick.minor.visible": True,
-    "xtick.direction": "in",
-    "ytick.direction": "in",
-    "ytick.minor.visible": True,
+    "xtick.labelsize": 0,
+    "ytick.labelsize": 0,
+    "xtick.minor.visible": False,
+    "xtick.direction": "inout",
+    "ytick.direction": "inout",
+    "ytick.minor.visible": False,
     # Spines
     "axes.spines.left": True,
     "axes.spines.bottom": True,

@@ -3,6 +3,7 @@ import itertools
 from shapely.geometry import LineString, Polygon, MultiPoint, Point
 from shapely import plotting
 import matplotlib.pyplot as plt
+import numpy as np
 import sympy as sp
 from penrose.mpl_config import custom_rcparams
 from dataclasses import dataclass
@@ -38,9 +39,10 @@ class Infty:
 
 
 class PenrosePy:
-    def __init__(self, length: int, plot_text: bool = True):
+    def __init__(self, length: int, plot_text: bool = True, draw_null: bool = False):
         self.length = length
-        self.plot_text = plot_text
+        self._plot_text = plot_text
+        self._draw_null = draw_null
         pass
 
     def penrose_diamond(self):
@@ -137,57 +139,73 @@ class PenrosePy:
             *spacelike_infties[0].xy, facecolors="none", edgecolors="blue", label="spacelike infinity"
         )
 
-        if self.plot_text:
+        if self._plot_text:
             plt.text(
-                timelike_infties[0].x + 0.15,
-                timelike_infties[0].y + 0.1,
+                timelike_infties[0].x + 0.15*self.length/4,
+                timelike_infties[0].y + 0.1*self.length/4,
                 timelike_infties[0].label,
                 fontsize=12,
             )
             plt.text(
-                timelike_infties[1].x + 0.15,
-                timelike_infties[1].y - 0.35,
+                timelike_infties[1].x + 0.15*self.length/4,
+                timelike_infties[1].y - 0.35*self.length/4,
                 timelike_infties[1].label,
                 fontsize=12,
             )
             plt.text(
-                spacelike_infties[0].x - 0.1,
-                spacelike_infties[0].y + 0.4,
+                spacelike_infties[0].x - 0.1*self.length/4,
+                spacelike_infties[0].y + 0.4*self.length/4,
                 spacelike_infties[0].label,
                 fontsize=12,
             )
 
-            plt.text((self.length / 2 + 0.05), (self.length / 2 + 0.05), r"$\mathcal{I}^+$", fontsize=12)
-            plt.text((self.length / 2 + 0.25), -(self.length / 2 + 0.1), r"$\mathcal{I}^-$", fontsize=12)
+            plt.text((self.length / 2 + 0.05*self.length/2), (self.length / 2 + 0.05*self.length/2), r"$\mathcal{I}^+$", fontsize=12)
+            plt.text((self.length / 2 + 0.25*self.length/2), -(self.length / 2 + 0.1*self.length/2), r"$\mathcal{I}^-$", fontsize=12)
 
         # Null hypersurfaces
-        null_hyps = [
-            (LineString(([0, 0], [self.length, self.length])), "u=0"),  # null outgoing
-            (LineString(([0, 0], [self.length, -self.length])), "v=0"),  # null ingoing
-        ]
-        null, label = null_hyps[0]
-        lineintersection = null.intersection(self.structure)
-        plt.plot(*lineintersection.xy, color=(0.477504, 0.821444, 0.318195, 1.0), label=label)
-        midpoint = lineintersection.interpolate(0.5, normalized=True)
-        if self.plot_text:
-            plt.text(midpoint.x, midpoint.y + 0.25, label, fontsize=10, ha="center", va="center", rotation=45)
+        if self._draw_null:
+            null_hyps = [
+                (LineString(([0, 0], [self.length, self.length])), "u=0"),  # null outgoing
+                (LineString(([0, 0], [self.length, -self.length])), "v=0"),  # null ingoing
+            ]
+            null, label = null_hyps[0]
+            lineintersection = null.intersection(self.structure)
+            plt.plot(*lineintersection.xy, color=(0.477504, 0.821444, 0.318195, 1.0), label=label)
+            midpoint = lineintersection.interpolate(0.5, normalized=True)
+            if self.plot_text:
+                plt.text(midpoint.x, midpoint.y + 0.25, label, fontsize=10, ha="center", va="center", rotation=45)
 
-        null, label = null_hyps[1]
-        lineintersection = null.intersection(self.structure)
-        plt.plot(*lineintersection.xy, color=(0.282623, 0.140926, 0.457517, 1.0), label=label)
-        midpoint = lineintersection.interpolate(0.5, normalized=True)
-        if self.plot_text:
-            plt.text(
-                midpoint.x, midpoint.y - 0.25, label, fontsize=10, ha="center", va="center", rotation=-45
-            )
+            null, label = null_hyps[1]
+            lineintersection = null.intersection(self.structure)
+            plt.plot(*lineintersection.xy, color=(0.282623, 0.140926, 0.457517, 1.0), label=label)
+            midpoint = lineintersection.interpolate(0.5, normalized=True)
+            if self.plot_text:
+                plt.text(
+                    midpoint.x, midpoint.y - 0.25, label, fontsize=10, ha="center", va="center", rotation=-45
+                )
 
         # Dashed-r-surface
         plt.plot(*r_surface.xy, "--", color="black")
         return
 
-    def plot_hypersurface(self, t, r, *args, **kwargs):
-        hypsurface = LineString([(x, y) for x, y in zip(t, r)])
+    def _plot_hypersurface(self, r, t, *args, **kwargs):
+        hypsurface = LineString([(x, y) for x, y in zip(r, t)])
         intersection = hypsurface.intersection(self.structure)
+        plt.plot(*intersection.xy, *args, **kwargs)
+
+    def plot_hypersurface(self, r, t, *args, **kwargs):
+        u_tilde = np.arctan(t - r) #*self.length
+        v_tilde = np.arctan(t + r) #*self.length
+
+        theta = np.radians(45)  # Convert angle to radians
+        rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)],
+                                    [np.sin(theta), np.cos(theta)]])
+
+        rotated_v_tilde, rotated_u_tilde = np.dot(rotation_matrix, np.array([v_tilde, u_tilde]))
+        hypsurface = LineString([(x, y) for x, y in zip(rotated_v_tilde, rotated_u_tilde)])
+        intersection = hypsurface.intersection(self.structure)
+        if intersection.geom_type != "LineString":
+            raise UserWarning("Intersection is not a point, be ware")
         plt.plot(*intersection.xy, *args, **kwargs)
 
     def show(self, *args, **kwargs):
