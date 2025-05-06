@@ -141,26 +141,36 @@ class PenrosePy:
 
         if self._plot_text:
             plt.text(
-                timelike_infties[0].x + 0.15*self.length/4,
-                timelike_infties[0].y + 0.1*self.length/4,
+                timelike_infties[0].x + 0.15 * self.length / 4,
+                timelike_infties[0].y + 0.1 * self.length / 4,
                 timelike_infties[0].label,
                 fontsize=12,
             )
             plt.text(
-                timelike_infties[1].x + 0.15*self.length/4,
-                timelike_infties[1].y - 0.35*self.length/4,
+                timelike_infties[1].x + 0.15 * self.length / 4,
+                timelike_infties[1].y - 0.35 * self.length / 4,
                 timelike_infties[1].label,
                 fontsize=12,
             )
             plt.text(
-                spacelike_infties[0].x - 0.1*self.length/4,
-                spacelike_infties[0].y + 0.4*self.length/4,
+                spacelike_infties[0].x - 0.1 * self.length / 4,
+                spacelike_infties[0].y + 0.4 * self.length / 4,
                 spacelike_infties[0].label,
                 fontsize=12,
             )
 
-            plt.text((self.length / 2 + 0.05*self.length/2), (self.length / 2 + 0.05*self.length/2), r"$\mathcal{I}^+$", fontsize=12)
-            plt.text((self.length / 2 + 0.25*self.length/2), -(self.length / 2 + 0.1*self.length/2), r"$\mathcal{I}^-$", fontsize=12)
+            plt.text(
+                (self.length / 2 + 0.05 * self.length / 2),
+                (self.length / 2 + 0.05 * self.length / 2),
+                r"$\mathcal{I}^+$",
+                fontsize=12,
+            )
+            plt.text(
+                (self.length / 2 + 0.25 * self.length / 2),
+                -(self.length / 2 + 0.1 * self.length / 2),
+                r"$\mathcal{I}^-$",
+                fontsize=12,
+            )
 
         # Null hypersurfaces
         if self._draw_null:
@@ -173,7 +183,9 @@ class PenrosePy:
             plt.plot(*lineintersection.xy, color=(0.477504, 0.821444, 0.318195, 1.0), label=label)
             midpoint = lineintersection.interpolate(0.5, normalized=True)
             if self.plot_text:
-                plt.text(midpoint.x, midpoint.y + 0.25, label, fontsize=10, ha="center", va="center", rotation=45)
+                plt.text(
+                    midpoint.x, midpoint.y + 0.25, label, fontsize=10, ha="center", va="center", rotation=45
+                )
 
             null, label = null_hyps[1]
             lineintersection = null.intersection(self.structure)
@@ -194,12 +206,11 @@ class PenrosePy:
         plt.plot(*intersection.xy, *args, **kwargs)
 
     def plot_hypersurface(self, r, t, *args, **kwargs):
-        u_tilde = np.arctan(t - r) #*self.length
-        v_tilde = np.arctan(t + r) #*self.length
+        u_tilde = np.arctan(t - r)  # *self.length
+        v_tilde = np.arctan(t + r)  # *self.length
 
         theta = np.radians(45)  # Convert angle to radians
-        rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)],
-                                    [np.sin(theta), np.cos(theta)]])
+        rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
 
         rotated_v_tilde, rotated_u_tilde = np.dot(rotation_matrix, np.array([v_tilde, u_tilde]))
         hypsurface = LineString([(x, y) for x, y in zip(rotated_v_tilde, rotated_u_tilde)])

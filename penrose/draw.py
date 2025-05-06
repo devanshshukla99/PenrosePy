@@ -3,10 +3,10 @@ import matplotlib.pylab as plt
 from matplotlib import transforms
 from penrose.penrose import PenrosePy
 
-length = np.pi/2
+length = np.pi / 2
 penrose = PenrosePy(length)
 penrose.penrose_triangle()
-r = np.linspace(-(2*length), (2*length), 1000)
+r = np.linspace(-(2 * length), (2 * length), 1000)
 # t = np.sqrt(r**2 + 0.5**2)
 # penrose.plot_hypersurface(r, t, label=r"$t^2 - r^2 = 0.5^2$")
 # t = np.sqrt(r**2 + 0.2**2)
